@@ -7,11 +7,25 @@ sealed trait Tree[A] {
 
   // Task 1: Write an insertion function that adds an element in the right spot.
 
-  def insert(a: A)(implicit ord: Order[A]): Tree[A] = ???
+  def insert(a: A)(implicit ord: Order[A]): Tree[A] = this match {
+    case Leaf() => Node(Tree.empty, a, Tree.empty)
+    case Node(left, v, right) => {
+      if (a < v) {
+        Node(left.insert(a), v, right)
+      } else {
+        Node(left, v, right.insert(a))
+      }
+    }
+  }
 
   // Task 2: Write a function that converts this tree to a set
 
-  def elements: Set[A] = ???
+  def elements: Set[A] = this match {
+    case Leaf() => Set.empty
+    case Node(left, v, right) => {
+      left.elements ++ right.elements + v
+    }
+  }
 
   // Task 3: Write a function that checks whether this tree satisfies the
   // "search tree property".
